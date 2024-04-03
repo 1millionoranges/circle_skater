@@ -23,12 +23,13 @@ void init(){
 }
 void draw(){
 	glClear(GL_COLOR_BUFFER_BIT);
-	player_draw();
 	halfpipe_draw();
+	player_draw();
 	glFlush();
 }
 void update(float delta, char* keys_pressed){
 	physics_update(delta);
+	player_update(delta, keys_pressed);
 }
 void display(){
     clock_gettime(CLOCK_MONOTONIC, current_time);
@@ -62,6 +63,7 @@ void print_keys(){
 void add_key(unsigned char key, int x, int y){
 	if(key == 27)
 	exit(0);
+	keys_pressed[key] = 1;
 }
 int main(int argc, char** argv){
 	init();

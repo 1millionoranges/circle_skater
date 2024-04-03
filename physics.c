@@ -11,7 +11,7 @@ struct physics_object **physics_object_list;
 void physics_init(){
 	physics_object_list = malloc(100 * sizeof(struct physics_object*));
 	gravity_vector = malloc(sizeof(struct vector)); 
-	gravity_vector->y = -10;
+	gravity_vector->y = 0;
 	gravity_vector->x = 0;
 }
 struct physics_object* physics_object_init(){
