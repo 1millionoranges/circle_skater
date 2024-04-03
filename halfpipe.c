@@ -50,8 +50,9 @@ void halfpipe_draw(){
                 glColor3f(0.0, 1.0, 0.0);
             }
         }
-
-        camera_draw_circle(&halfpipe_obj->position, halfpipe_obj->radius);
+        camera_draw_arc(&halfpipe_obj->position, halfpipe_obj->radius+halfpipe_obj->width, M_PI, 2*M_PI);
+        glColor3f(0.0,0.0,0.0);
+        camera_draw_arc(&halfpipe_obj->position, halfpipe_obj->radius, M_PI, 2*M_PI);
     }
 }
 int is_point_inside(struct halfpipe_object* halfpipe_obj, double x, double y){
