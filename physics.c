@@ -38,3 +38,8 @@ void physics_update(float delta){
 		physics_move(physics_object_list[i], delta);
 	}
 }
+
+struct physics_object ** get_physics_objects(int* phys_obj_count){
+	*phys_obj_count = num_physics_objects;
+	return physics_object_list;
+}
