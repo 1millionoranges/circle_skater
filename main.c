@@ -5,6 +5,7 @@
 #include<time.h>
 #include "vector.c"
 #include "physics.c"
+#include "camera.c"
 #include "player.c"
 char keys_pressed[256];
 struct timespec *current_time;
@@ -15,6 +16,7 @@ void init(){
 	current_time = malloc(sizeof(struct timespec));
     clock_gettime(CLOCK_MONOTONIC, last_time);
 	physics_init();
+	camera_init();
     	player_init();
 }
 void draw(){
