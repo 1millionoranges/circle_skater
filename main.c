@@ -6,6 +6,7 @@
 #include "vector.c"
 #include "physics.c"
 #include "camera.c"
+#include "halfpipe.c"
 #include "player.c"
 char keys_pressed[256];
 struct timespec *current_time;
@@ -17,11 +18,13 @@ void init(){
     clock_gettime(CLOCK_MONOTONIC, last_time);
 	physics_init();
 	camera_init();
+	halfpipe_init();
     	player_init();
 }
 void draw(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	player_draw();
+	halfpipe_draw();
 	glFlush();
 }
 void update(float delta, char* keys_pressed){
