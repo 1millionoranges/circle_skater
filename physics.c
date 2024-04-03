@@ -2,6 +2,7 @@ struct physics_object{
 	struct vector velocity;
 	struct vector position;
 	float mass;
+	float radius;
 };
 struct vector *gravity_vector;
 int num_physics_objects = 0;
@@ -19,6 +20,7 @@ struct physics_object* physics_object_init(){
 	obj->velocity.y = 0;
 	obj->position.x = 0;
 	obj->position.y = 0;
+	obj->radius = 0.2;
 	obj->mass = 1;
 	physics_object_list[num_physics_objects++] = obj;
 	return obj;

@@ -8,7 +8,6 @@ void camera_init(){
 }
 void camera_draw_circle(struct vector* world_position, float radius){
     glBegin(GL_POLYGON);
-	glColor3f(1.0, 1.0, 1.0);
     double transformed_x = camera_scale * (world_position->x - camera_position->x);
     double transformed_y = camera_scale * (world_position->y - camera_position->y);
     float transformed_radius = radius * camera_scale;
