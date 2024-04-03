@@ -5,6 +5,7 @@
 #include<time.h>
 #include "vector.c"
 #include "physics.c"
+#include "player.c"
 char keys_pressed[256];
 struct timespec *current_time;
 struct timespec *last_time;
@@ -13,13 +14,16 @@ void init(){
 	last_time = malloc(sizeof(struct timespec));
 	current_time = malloc(sizeof(struct timespec));
     clock_gettime(CLOCK_MONOTONIC, last_time);
+	physics_init();
+    	player_init();
 }
 void draw(){
 	glClear(GL_COLOR_BUFFER_BIT);
+	player_draw();
 	glFlush();
 }
 void update(float delta, char* keys_pressed){
-
+	physics_update(delta);
 }
 void display(){
     clock_gettime(CLOCK_MONOTONIC, current_time);

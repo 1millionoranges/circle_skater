@@ -5,9 +5,10 @@ struct physics_object{
 };
 struct vector *gravity_vector;
 int num_physics_objects = 0;
-struct physics_object *physics_object_list[100];
+struct physics_object **physics_object_list;
 	
 void physics_init(){
+	physics_object_list = malloc(100 * sizeof(struct physics_object*));
 	gravity_vector = malloc(sizeof(struct vector)); 
 	gravity_vector->y = 10;
 	gravity_vector->x = 0;
@@ -19,11 +20,20 @@ struct physics_object* physics_object_init(){
 	obj->position.x = 0;
 	obj->position.y = 0;
 	obj->mass = 1;
+	physics_object_list[num_physics_objects++] = obj;
 	return obj;
-	physics_object_list[num_physics_objects] = obj;
 }
-void physics_apply_gravity(struct physics_object* obj,float delta){
+void physics_apply_gravity(struct physics_object* obj,float delta){	
 	obj->velocity.y += gravity_vector->y * delta;
-	num_physics_objects++;
-}
 
+}
+void physics_move(struct physics_object* obj, float delta){
+	obj->position.x += obj->velocity.x * delta;
+	obj->position.y += obj->velocity.y * delta;
+}
+void physics_update(float delta){
+	for(int i = 0; i < num_physics_objects; i++){
+		physics_apply_gravity(physics_object_list[i], delta * 0.001);
+		physics_move(physics_object_list[i], delta * 0.001);
+	}
+}
