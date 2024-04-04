@@ -11,16 +11,7 @@
 char keys_pressed[256];
 struct timespec *current_time;
 struct timespec *last_time;
-void init(){
-	//&keys_pressed = malloc(4 * 20);
-	last_time = malloc(sizeof(struct timespec));
-	current_time = malloc(sizeof(struct timespec));
-    clock_gettime(CLOCK_MONOTONIC, last_time);
-	physics_init();
-	camera_init();
-	halfpipe_init();
-    	player_init();
-}
+
 void draw(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	halfpipe_draw();
@@ -45,7 +36,22 @@ void display(){
 //	last_time = current_time;
 }
 void on_idle(){
+//	glutPostRedisplay();
+}
+void timer_loop(int a){
 	glutPostRedisplay();
+	glutTimerFunc(16.668, timer_loop, 0);
+}
+void init(){
+	//&keys_pressed = malloc(4 * 20);
+	last_time = malloc(sizeof(struct timespec));
+	current_time = malloc(sizeof(struct timespec));
+    clock_gettime(CLOCK_MONOTONIC, last_time);
+	physics_init();
+	camera_init();
+	halfpipe_init();
+    	player_init();
+	glutTimerFunc(16.668, timer_loop, 0);
 }
 void remove_key(unsigned char key, int x, int y){
 	keys_pressed[key] = 0;
@@ -66,8 +72,9 @@ void add_key(unsigned char key, int x, int y){
 	keys_pressed[key] = 1;
 }
 int main(int argc, char** argv){
-	init();
 	glutInit(&argc, argv);
+	
+	init();
 	glutInitDisplayMode(GLUT_SINGLE);
 	glutInitWindowSize(600,600);
 	glutInitWindowPosition(500,500);
