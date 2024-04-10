@@ -22,10 +22,12 @@ void make_halfpipe(){
     new_pos.y = 0;
     struct halfpipe_object* new_halfpipe = halfpipe_object_init(&new_pos, 3.0, 3.0);
 }
+
 void halfpipe_init(){
     halfpipe_list = malloc(100 * sizeof(struct halfpipe_object*));
     make_halfpipe();
 }
+
 int is_colliding(struct halfpipe_object* halfpipe_obj, struct physics_object* physics_obj){
     double min_distance = halfpipe_obj->radius - physics_obj->radius;
     double max_distance = halfpipe_obj->radius + halfpipe_obj->width + physics_obj->radius;
@@ -38,24 +40,43 @@ int is_colliding(struct halfpipe_object* halfpipe_obj, struct physics_object* ph
     return 0;
 }
 
+struct vector* halfpipe_get_inner_radius_normal(struct halfpipe_object* hp, struct vector* pos){
+    struct vector* translated_pos = malloc(sizeof(struct vector));
+    translated_pos->x = -(pos->x - hp->position.x);
+    translated_pos->y = -(pos->y - hp->position.y);
+    vector_normalize(translated_pos);
+    return translated_pos;
+}
+
 void halfpipe_draw(){
+    for(int i = 0; i < num_halfpipes; i++){
+        struct halfpipe_object* halfpipe_obj = halfpipe_list[i];
+        glColor3f(1.0,0,0);
+        camera_draw_arc(&halfpipe_obj->position, halfpipe_obj->radius+halfpipe_obj->width, M_PI, 2*M_PI);
+        glColor3f(0.0,0.0,0.0);
+        camera_draw_arc(&halfpipe_obj->position, halfpipe_obj->radius, M_PI, 2*M_PI);
+    }
+}
+void halfpipe_update(float delta){
     int* phys_object_count = malloc(sizeof(int));
     struct physics_object ** phys_objects = get_physics_objects(phys_object_count);
     for(int i = 0; i < num_halfpipes; i++){
         struct halfpipe_object* halfpipe_obj = halfpipe_list[i];
         for(int j = 0; j < *phys_object_count; j++){
             if(is_colliding(halfpipe_obj, phys_objects[j])){
-                glColor3f(1.0, 0.0, 0.0);
-            }else{
-                glColor3f(0.0, 1.0, 0.0);
+                struct collision* coll = collision_init();
+                coll->position.x = phys_objects[j]->last_position.x;
+                coll->position.y = phys_objects[j]->last_position.y;
+                struct vector* normal_vector = halfpipe_get_inner_radius_normal(halfpipe_obj, &coll->position);                
+                coll->normal.x = normal_vector->x;
+                coll->normal.y = normal_vector->y;
+                free(normal_vector);
+                physics_collide(phys_objects[j], coll);
+                free(coll);
             }
         }
-        camera_draw_arc(&halfpipe_obj->position, halfpipe_obj->radius+halfpipe_obj->width, M_PI, 2*M_PI);
-        glColor3f(0.0,0.0,0.0);
-        camera_draw_arc(&halfpipe_obj->position, halfpipe_obj->radius, M_PI, 2*M_PI);
     }
 }
 int is_point_inside(struct halfpipe_object* halfpipe_obj, double x, double y){
     return 0;
 }
-

@@ -3,6 +3,8 @@ struct physics_object{
 	struct vector position;
 	float mass;
 	float radius;
+	struct vector last_velocity;
+	struct vector last_position;
 };
 struct vector *gravity_vector;
 int num_physics_objects = 0;
@@ -29,6 +31,10 @@ void physics_apply_gravity(struct physics_object* obj,float delta){
 	obj->velocity.y += gravity_vector->y * delta;
 }
 void physics_move(struct physics_object* obj, float delta){
+	obj->last_velocity.x = obj->velocity.x;
+	obj->last_velocity.y = obj->velocity.y;
+	obj->last_position.x = obj->position.x;
+	obj->last_position.y = obj->position.y;
 	obj->position.x += obj->velocity.x * delta;
 	obj->position.y += obj->velocity.y * delta;
 }
@@ -37,6 +43,15 @@ void physics_update(float delta){
 		physics_apply_gravity(physics_object_list[i], delta);
 		physics_move(physics_object_list[i], delta);
 	}
+}
+
+void physics_collide(struct physics_object* obj, struct collision* coll){
+	float coeff_num = -(coll->normal.x * obj->velocity.x) - (coll->normal.y * obj->velocity.y);
+	float coeff_denom = (coll->normal.x * coll->normal.x + coll->normal.y * coll->normal.y);
+	float coeff = coeff_num / coeff_denom;
+
+	obj->velocity.x += coeff * coll->normal.x;
+	obj->velocity.y += coeff * coll->normal.y;
 }
 
 struct physics_object ** get_physics_objects(int* phys_obj_count){

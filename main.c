@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include<time.h>
 #include "vector.c"
+#include "collision.c"
 #include "physics.c"
 #include "camera.c"
 #include "halfpipe.c"
@@ -19,8 +20,12 @@ void draw(){
 	glFlush();
 }
 void update(float delta, char* keys_pressed){
-	physics_update(delta);
+	if(delta > 0.2){
+		printf("low fr\n");
+	}
 	player_update(delta, keys_pressed);
+	physics_update(delta);
+	halfpipe_update(delta);
 }
 void display(){
     clock_gettime(CLOCK_MONOTONIC, current_time);
@@ -35,13 +40,16 @@ void display(){
 	clock_gettime(CLOCK_MONOTONIC, last_time);
 //	last_time = current_time;
 }
+
 void on_idle(){
 //	glutPostRedisplay();
 }
+
 void timer_loop(int a){
 	glutPostRedisplay();
 	glutTimerFunc(16.668, timer_loop, 0);
 }
+
 void init(){
 	//&keys_pressed = malloc(4 * 20);
 	last_time = malloc(sizeof(struct timespec));
@@ -53,9 +61,11 @@ void init(){
     	player_init();
 	glutTimerFunc(16.668, timer_loop, 0);
 }
+
 void remove_key(unsigned char key, int x, int y){
 	keys_pressed[key] = 0;
 }
+
 void print_keys(){
 	printf("keys: ");
 	for(int i = 0; i < 256; i++){
@@ -71,9 +81,9 @@ void add_key(unsigned char key, int x, int y){
 	exit(0);
 	keys_pressed[key] = 1;
 }
+
 int main(int argc, char** argv){
 	glutInit(&argc, argv);
-	
 	init();
 	glutInitDisplayMode(GLUT_SINGLE);
 	glutInitWindowSize(600,600);
