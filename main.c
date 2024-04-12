@@ -3,6 +3,8 @@
 #include <math.h>
 #include <GL/glut.h>
 #include<time.h>
+int screen_size_x = 1600;
+int screen_size_y = 900;
 #include "vector.c"
 #include "collision.c"
 #include "physics.c"
@@ -12,6 +14,7 @@
 char keys_pressed[256];
 struct timespec *current_time;
 struct timespec *last_time;
+
 
 void draw(){
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -86,8 +89,8 @@ int main(int argc, char** argv){
 	glutInit(&argc, argv);
 	init();
 	glutInitDisplayMode(GLUT_SINGLE);
-	glutInitWindowSize(600,600);
-	glutInitWindowPosition(500,500);
+	glutInitWindowSize(screen_size_x,screen_size_y);
+	glutInitWindowPosition(50,50);
 	glutCreateWindow("Fireswinger");
 	glutDisplayFunc(display);
 	glutKeyboardFunc(add_key);
