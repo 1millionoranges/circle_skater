@@ -34,7 +34,9 @@ void physics_move(struct physics_object* obj, float delta){
 	obj->last_velocity.x = obj->velocity.x;
 	obj->last_velocity.y = obj->velocity.y;
 	obj->last_position.x = obj->position.x;
+	obj->last_position.x = 0;
 	obj->last_position.y = obj->position.y;
+	obj->last_position.y = 0;
 	obj->position.x += obj->velocity.x * delta;
 	obj->position.y += obj->velocity.y * delta;
 }
@@ -49,9 +51,10 @@ void physics_collide(struct physics_object* obj, struct collision* coll){
 	float coeff_num = -(coll->normal.x * obj->velocity.x) - (coll->normal.y * obj->velocity.y);
 	float coeff_denom = (coll->normal.x * coll->normal.x + coll->normal.y * coll->normal.y);
 	float coeff = coeff_num / coeff_denom;
-
 	obj->velocity.x += coeff * coll->normal.x;
 	obj->velocity.y += coeff * coll->normal.y;
+	obj->position.x = coll->position.x;
+	obj->position.y = coll->position.y;
 }
 
 struct physics_object ** get_physics_objects(int* phys_obj_count){

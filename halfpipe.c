@@ -65,8 +65,8 @@ void halfpipe_update(float delta){
         for(int j = 0; j < *phys_object_count; j++){
             if(is_colliding(halfpipe_obj, phys_objects[j])){
                 struct collision* coll = collision_init();
-                coll->position.x = phys_objects[j]->last_position.x;
-                coll->position.y = phys_objects[j]->last_position.y;
+                coll->position.x = phys_objects[j]->position.x;
+                coll->position.y = phys_objects[j]->position.y;
                 struct vector* normal_vector = halfpipe_get_inner_radius_normal(halfpipe_obj, &coll->position);                
                 coll->normal.x = normal_vector->x;
                 coll->normal.y = normal_vector->y;
