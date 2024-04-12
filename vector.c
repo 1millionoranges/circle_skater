@@ -18,3 +18,11 @@ void vector_normalize(struct vector* v){
     double length = vector_length(v);
     vector_scale(v, 1.0/length); 
 }
+void vector_set_length(struct vector* v, float length){
+	vector_normalize(v);
+	vector_scale(v, length);
+}
+void vector_reverse(struct vector* v){
+	v->x = -v->x;
+	v->y = -v->y;
+}

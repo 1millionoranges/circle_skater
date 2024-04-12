@@ -70,6 +70,11 @@ void halfpipe_update(float delta){
                 struct vector* normal_vector = halfpipe_get_inner_radius_normal(halfpipe_obj, &coll->position);                
                 coll->normal.x = normal_vector->x;
                 coll->normal.y = normal_vector->y;
+                vector_set_length(normal_vector, halfpipe_obj->radius - phys_objects[j]->radius);
+                vector_reverse(normal_vector);
+                vector_add(normal_vector, &halfpipe_obj->position);
+                coll->position.x = normal_vector->x;
+                coll->position.y = normal_vector->y;
                 free(normal_vector);
                 physics_collide(phys_objects[j], coll);
                 free(coll);
